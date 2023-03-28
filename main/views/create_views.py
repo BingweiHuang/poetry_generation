@@ -1,6 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 
 from main.permissions import IsUserOrReadOnly, StaffOnly, AdminOnly
+from main.throttles import UserAIRateThrottle
 from main.utils.MyResponse import MyResponse
 from main.utils.model.gpt2.gpt2_model import Gpt2Model
 from main.utils.model.lstm.lstm_model import LstmModel
@@ -15,7 +16,7 @@ class Gpt2View(APIView):
 
     permission_classes = ([IsAuthenticated, StaffOnly])
     throttle_scope = 'AI_api' # 针对接口限流
-    # throttle_classes = [AnonReadRateThrottle, UserReadRateThrottle] # 针对用户限流
+    throttle_classes = [UserAIRateThrottle] # 针对用户限流
 
     def get(self, request):
         arg = request.GET
@@ -71,6 +72,7 @@ class LstmView(APIView):
     # style=0&text=昨&num=5&use_rhyme=1&yan=7&jue=1&ru=1&qi=0
     permission_classes = ([IsAuthenticated, StaffOnly])
     throttle_scope = 'AI_api'  # 针对接口限流
+    throttle_classes = [UserAIRateThrottle]  # 针对用户限流
 
     def get(self, request):
         arg = request.GET

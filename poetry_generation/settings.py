@@ -182,7 +182,7 @@ REST_FRAMEWORK = {
         'anon': '30/min', # 针对未登录用户的全局限流
         'user': '60/min', # 针对已登录用户的全局限流
 
-        'AI_api': '1/min', # 针对AI作诗接口的限流
+        'AI_api': '2/min', # 针对AI作诗接口的限流
     },
 
 }
