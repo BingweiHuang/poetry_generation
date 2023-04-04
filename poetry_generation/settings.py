@@ -185,6 +185,9 @@ REST_FRAMEWORK = {
         'anon': '20/min', # 针对未登录用户的全局限流
         'user': '30/min', # 针对已登录用户的全局限流
 
+        'anon_email': '2/min', # 针对未登录用户的发邮件限流
+        'user_email': '2/min', # 针对已登录用户的发邮件限流
+
         'AI_api': '2/min', # 针对AI作诗接口的限流
     },
 
@@ -242,24 +245,36 @@ EMAIL_USE_TLS = False
 EMAIL_FROM = '1073224563@qq.com'
 
 
+# DRF扩展
+REST_FRAMEWORK_EXTENSIONS = {
+    # 默认缓存时间
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60 * 24,
+    # 缓存存储
+    'DEFAULT_USE_CACHE': 'default',
+}
+
 CACHES = {
+    # 'default': {
+    #     'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+    #     'LOCATION': 'django_cache',  # 验证码缓存表名
+    #     'TIMEOUT': 300,  # 秒 默认情况下缓存键永不过时
+    #     'OPTIONS': {
+    #         'MAX_ENTRIES': 1000,  # 删除旧值之前允许缓存的最大条目。默认是 300
+    #         'CULL_FREQUENCY': 2,  # 缓存条数达到最大值时，删除1/x的缓存数据 max_entries*(1/cull_frequency)
+    #     }
+    # },
+
     'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'django_cache',  # 验证码缓存表名
-        'TIMEOUT': 300,  # 秒 默认情况下缓存键永不过时
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000,  # 删除旧值之前允许缓存的最大条目。默认是 300
-            'CULL_FREQUENCY': 2,  # 缓存条数达到最大值时，删除1/x的缓存数据 max_entries*(1/cull_frequency)
-        }
+        'BACKEND': 'django_redis.cache.RedisCache',
+        # 'LOCATION': 'redis://1.12.62.89:6379', # redis所在服务器或容器ip地址  腾讯云
+        'LOCATION': 'redis://124.71.12.157:6379', # redis所在服务器或容器ip地址 华为云
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+             "PASSWORD": "Wei909140058", # 你设置的密码
+        },
     },
 }
 
-
-# SESSION_COOKIE_NAME ＝ "sessionid"  # Session的cookie保存在浏览器上时的key，即：sessionid＝随机字符串
-# SESSION_COOKIE_PATH ＝ "/"  # Session的cookie保存的路径
-SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名
-SESSION_COOKIE_SECURE = False  # 是否Https传输cookie
-SESSION_COOKIE_HTTPONLY = True  # 是否Session的cookie只支持http传输
-SESSION_COOKIE_AGE = 1209600  # Session的cookie失效日期（2周）（数字为秒数）
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 是否关闭浏览器使得Session过期
-SESSION_SAVE_EVERY_REQUEST = False  # 是否每次请求都保存Session，默认修改之后才保存
+REDIS_TIMEOUT=24*60*60
+CUBES_REDIS_TIMEOUT=60*30
+NEVER_REDIS_TIMEOUT=365*24*60*60

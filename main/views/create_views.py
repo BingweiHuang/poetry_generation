@@ -1,8 +1,6 @@
 from rest_framework.permissions import IsAuthenticated
 
 from main.permissions import IsUserOrReadOnly, StaffOnly, AdminOnly
-from main.throttles import UserAIRateThrottle
-from main.utils.MyResponse import MyResponse
 from main.utils.model.gpt2.gpt2_model import Gpt2Model
 from main.utils.model.lstm.lstm_model import LstmModel
 from poetry_generation.settings import BASE_DIR
@@ -16,7 +14,6 @@ class Gpt2View(APIView):
 
     permission_classes = ([IsAuthenticated, StaffOnly])
     throttle_scope = 'AI_api' # 针对接口限流
-    throttle_classes = [UserAIRateThrottle] # 针对用户限流
 
     def get(self, request):
         arg = request.GET
@@ -61,18 +58,18 @@ class Gpt2View(APIView):
             datas = {
                 "createList": createList,
             }
-            return MyResponse(datas, status=200)
+            return Response(datas, status=200)
 
         except Exception as e:
             traceback.print_exc()
-            return MyResponse({'result': "gpt2作诗失败"}, status=500)
+            return Response({'result': "gpt2作诗失败"}, status=500)
 
 class LstmView(APIView):
 
     # style=0&text=昨&num=5&use_rhyme=1&yan=7&jue=1&ru=1&qi=0
     permission_classes = ([IsAuthenticated, StaffOnly])
     throttle_scope = 'AI_api'  # 针对接口限流
-    throttle_classes = [UserAIRateThrottle]  # 针对用户限流
+    # throttle_classes = [UserAIRateThrottle]  # 针对用户限流
 
     def get(self, request):
         arg = request.GET
@@ -118,8 +115,8 @@ class LstmView(APIView):
             datas = {
                 "createList": createList,
             }
-            return MyResponse(datas, 200)
+            return Response(datas, 200)
 
         except Exception as e:
             traceback.print_exc()
-            return MyResponse({'result': "lstm作诗失败"}, status=500)
+            return Response({'result': "lstm作诗失败"}, status=500)
