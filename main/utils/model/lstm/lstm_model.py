@@ -177,7 +177,7 @@ class LstmModel(object):
         lstm = LSTM(256)(dropout)
         # lstm = CuDNNLSTM(256)(dropout)
         dropout = Dropout(0.6)(lstm)
-        dense = Dense(len(self.words), activation='softmax')(dropout)
+        dense = Dense(len(self.words), activation='softmax')(dropout) # Dense：全连接层 softmax：归一化（所有维度概率合为1）
         self.model = Model(inputs=input_tensor, outputs=dense)
         optimizer = Adam(lr=self.learning_rate)
         self.model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
@@ -194,7 +194,7 @@ class LstmModel(object):
         preds = np.asarray(preds).astype('float64')
         exp_preds = np.power(preds, 1. / self.temperature)
         preds = exp_preds / np.sum(exp_preds)
-        pro = np.random.choice(range(len(preds)), 1, p=preds)
+        pro = np.random.choice(range(len(preds)), 1, replace=False, p=preds) # 不放回取样
 
         num = int(pro.squeeze())
         word = self.num2word[num]
@@ -202,14 +202,14 @@ class LstmModel(object):
 
         if self.use_rhyme: # 用韵生成格律诗
             while not (self.base_filter(word) and self.rhyme_filter(word)) and count < 10000:  # 若生成的字符不满足押韵和基础要求 则重新生成
-                pro = np.random.choice(range(len(preds)), 1, p=preds)
+                pro = np.random.choice(range(len(preds)), 1, replace=False, p=preds) # 不放回取样
                 num = int(pro.squeeze())
                 word = self.num2word[num]
                 count += 1
             pass
         else: # 不用韵
             while not (self.base_filter(word)) and count < 10000:  # 若生成的字符不满足押韵和基础要求 则重新生成
-                pro = np.random.choice(range(len(preds)), 1, p=preds)
+                pro = np.random.choice(range(len(preds)), 1, replace=False, p=preds) # 不放回取样
                 num = int(pro.squeeze())
                 word = self.num2word[num]
                 count += 1

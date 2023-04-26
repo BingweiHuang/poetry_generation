@@ -34,6 +34,7 @@ class Gpt2View(APIView):
             qi = int(arg.get("qi", qi))
             use_rhyme = int(arg.get("use_rhyme", use_rhyme))
             where = f'{yan}_yan_{"jue" if jue == 0 else "lv"}_model'
+            # where = f'{yan}_yan_{"jue"}_model'
             model_path = f'{BASE_DIR}/main/utils/model/gpt2/model_file/{where}'  # 模型路径
             raw_data_path = ''  # 原始训练语料
 
