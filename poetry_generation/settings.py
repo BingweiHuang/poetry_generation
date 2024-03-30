@@ -97,7 +97,7 @@ DATABASES = {
         # 'NAME': 'poetry',# 你的数据库名
         'USER': 'root',# 你的用户名
         'PASSWORD': 'Wei909140058',#你的密码
-        'HOST': 'localhost',# 本地连接
+        'HOST': '82.156.236.172',
         'PORT': '3306',# 本地端口号
         'serverTimezone': 'Asia/Shanghai' # 时区
 
@@ -266,8 +266,8 @@ CACHES = {
 
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        # 'LOCATION': 'redis://1.12.62.89:6379', # redis所在服务器或容器ip地址  腾讯云
-        'LOCATION': 'redis://124.71.12.157:6379', # redis所在服务器或容器ip地址 华为云
+        # 'LOCATION': 'redis://82.156.236.172:6379', # redis所在服务器或容器ip地址  腾讯云sysy机
+        'LOCATION': 'redis://60.205.235.222:6379',  # redis所在服务器或容器ip地址 阿里云AI机
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
              "PASSWORD": "Wei909140058", # 你设置的密码

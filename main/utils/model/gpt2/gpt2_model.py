@@ -561,6 +561,8 @@ class Gpt2Model(object):
             temperature=temperature, top_k=topk, top_p=topp, device=device
         )
 
+        del model
+
         ans_text = self.tokenizer.convert_ids_to_tokens(out[0])  # id转成字典里面的token
 
         ans_text = ''.join(ans_text).replace('##', '').strip()  # 去掉所有的占位符'##'

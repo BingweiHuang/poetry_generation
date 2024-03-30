@@ -56,6 +56,8 @@ class Gpt2View(APIView):
                 sen = [s + '。' for s in sen]
                 createList.append((ret_use_rhyme, foot, sen))
 
+            del model
+
             datas = {
                 "createList": createList,
             }
